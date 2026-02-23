@@ -7,16 +7,22 @@ def get_xi(distribution):
         sum_pi += p_i
         if p <= sum_pi:
             return x_i
+    return None
 
-def get_bankruptcy_prob(distribution, fund, n=100_000):
-    k = 0
-    for _ in range(n):
-        sum_xi = 0
-        for _ in range(n): 
-            sum_xi += get_xi(distribution)
-        if sum_xi > fund:
-            k += 1
-    return k / n
+
+def get_bankruptcy_prob(distribution, fund, n=10, simulations=100_000):
+    bankruptcies = 0
+
+    for _ in range(simulations):
+        total = 0
+        for _ in range(n):
+            total += get_xi(distribution)
+
+        if total > fund:
+            bankruptcies += 1
+
+    return bankruptcies / simulations
+
 
 def find_required_fund(distribution, target_prob=0.05):
     fund = 0
@@ -26,13 +32,14 @@ def find_required_fund(distribution, target_prob=0.05):
             return fund, prob
         fund += 50_000
 
+
 dist = {
-    0 : 0.8,
-    100_000 : 0.15,
-    200_000 : 0.05,
+    0: 0.8,
+    100_000: 0.15,
+    200_000: 0.05,
 }
 
-fund_money, prob = find_required_fund(dist)
+fund_money, bank_prob = find_required_fund(dist)
 
 print(f"Required fund: {fund_money}$")
-print(f"Estimated bankruptcy probability:", prob)
+print(f"Estimated bankruptcy probability:", bank_prob)
