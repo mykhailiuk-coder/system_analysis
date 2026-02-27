@@ -1,23 +1,11 @@
+#correct version
 import numpy as np
-import random
 
-def get_state(matrix, initial_state, states):
+def get_state(matrix, current_state_idx, states):
     matrix = np.array(matrix)
-    initial_state = np.array(initial_state)
-    random_value = random.random()
-    vector = matrix @ initial_state
-    probs = []
-    for v in vector:
-        if v != 0:
-            probs.append(v)
-    if random_value < probs[0]:
-        prob = probs[0]
-        index = np.where(vector == prob)
-        return states[index[0][0]]
-    else:
-        prob = probs[1]
-        index = np.where(vector == prob)
-        return states[index[0][0]]
+    probs = matrix[current_state_idx]
+    probs = probs / probs.sum()
+    return np.random.choice(states, p=probs)
 
 m = [
     [0, 1, 0, 0, 0, 0],
@@ -26,10 +14,17 @@ m = [
     [0, 0, 0.6, 0, 0.4, 0],
     [0, 0, 0, 0.8, 0, 0.2],
     [0, 0, 0, 0, 1, 0]
-    ]
+]
 
 all_states = [0, 1, 2, 3, 4, 5]
-state0 = [0, 1, 0, 0, 0, 0]
+current_state = 2  
+
+print(f"Початковий стан: {current_state}")
+history = [current_state]
 
 for _ in range(20):
-    print(get_state(m, state0, all_states), end=' ')
+    current_state = get_state(m, current_state, all_states)
+    history.append(current_state)
+
+print("Траєкторія:")
+print(" -> ".join(map(str, history)))
