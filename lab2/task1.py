@@ -19,7 +19,7 @@ m = [
     [0, 0, 0, 0, 1, 0]
 ]
 
-all_states = [0, 1, 2, 3, 4, 5]
+all_states = [0, 1, 2, 3, 4, 5] 
 current_state = [1, 0, 0, 0, 0, 0]
 
 print(f"Initial state: {current_state}")
