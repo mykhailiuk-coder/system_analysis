@@ -32,3 +32,55 @@ plt.ylabel("W(t)")
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.show()
+
+# task 2
+import numpy as np
+import matplotlib.pyplot as plt
+
+s0 = 10      
+mu = 0.05    
+sigma = 0.2  
+
+T = 10       
+n_steps = 1000
+n_paths = 3
+dt = T / n_steps 
+
+t = np.linspace(0, T, n_steps)
+
+draws = np.random.normal(0, np.sqrt(dt), size=(n_steps, n_paths))
+draws[0, :] = 0
+W_paths = np.cumsum(draws, axis=0)
+
+t_col = t[:, np.newaxis] 
+s = s0 * np.exp((mu - sigma**2 / 2) * t_col + sigma * W_paths)
+
+plt.figure(figsize=(10, 6))
+plt.plot(t, s)
+plt.axhline(s0, color='black', linestyle='--', alpha=0.3) # Лінія старту
+plt.xlabel("Час")
+plt.ylabel("Ціна активу")
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# task 3
+import numpy as np
+import matplotlib.pyplot as plt
+
+lam = 2        
+T = 10         
+n_steps = 1000
+dt = T / n_steps
+
+t = np.linspace(0, T, n_steps)
+
+p = np.random.uniform(size=n_steps) < (lam * dt)
+
+poisson_process = np.cumsum(p)
+
+plt.figure(figsize=(10, 5))
+plt.step(t, poisson_process, where='post') 
+plt.xlabel("Час")
+plt.ylabel("Кількість подій (N_t)")
+plt.grid(True, alpha=0.3)
+plt.show()
